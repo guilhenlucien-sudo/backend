@@ -48,7 +48,12 @@ export const telemetry = async (event) => {
     event,
     source: meta.name,
   };
-  return telemetryInstance.post(`monitor`, body);
+  try {
+    return await telemetryInstance.post(`monitor`, body);
+  } catch (err) {
+    console.error("telemetry: failed to send monitor ping", err);
+    return null;
+  }
 };
 
 export const telemetryError = async (event, error) => {
@@ -62,7 +67,12 @@ export const telemetryError = async (event, error) => {
     error: JSON.stringify(error),
   };
   console.log("error", body);
-  return telemetryInstance.post(`error`, body);
+  try {
+    return await telemetryInstance.post(`error`, body);
+  } catch (err) {
+    console.error("telemetryError: failed to send error telemetry", err);
+    return null;
+  }
 };
 
 export const telemetryRuntimeDependencyPerformance = async ({
@@ -84,7 +94,12 @@ export const telemetryRuntimeDependencyPerformance = async ({
     yarnFinishTime,
     dependenciesString,
   };
-  return telemetryInstance.post(`runtime-dependency-performance`, body);
+  try {
+    return await telemetryInstance.post(`runtime-dependency-performance`, body);
+  } catch (err) {
+    console.error("telemetryRuntimeDependencyPerformance: failed to send telemetry", err);
+    return null;
+  }
 };
 
 export const inviteUserService = async (
